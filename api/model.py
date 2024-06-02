@@ -7,7 +7,7 @@ class RemoveBgInRequest(BaseModel):
 class RemoveBgInResponse(BaseModel):
     status_code: int
     message: str
-    image_base64: str
+    mask_url: str
 
 class GetMaskBGRequest(BaseModel): 
     image_base64: str

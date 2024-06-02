@@ -2,9 +2,6 @@
 from diffusers import AutoPipelineForInpainting
 from diffusers.utils import load_image
 
-# Image Gen Library
-from SD_XL.diffusion_gen import *
-
 # Image Library
 from PIL import Image, ImageOps
 import cv2
@@ -12,7 +9,6 @@ import cv2
 # TRACER 
 from TRACER.inference.inference import Inference
 from TRACER.config import getConfig, getConfig_Input
-from SD_XL.module import *
 
 # Torch and Numpy 
 import torch
@@ -22,6 +18,7 @@ import numpy as np
 import os
 import random
 import warnings
+import rmbg
 
 # Get args and warning
 warnings.filterwarnings("ignore")

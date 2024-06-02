@@ -1,11 +1,28 @@
 from fastapi import APIRouter, status
+import cv2
+import pyrebase
 from .model import *
-from utils.tools import base64_to_pil, pil_to_base64
-# from SD_XL.module import bgChanging, inpaint, rmbg
 from module.tracer import getbg
+from utils.tools import base64_to_pil, pil_to_base64, image_to_base64, base64_to_image
 
 router = APIRouter()
 
+
+config = {
+    "apiKey": "AIzaSyAFI6XXO7Izkz0r59LmSI1doHLZtMGI6T4",
+    "authDomain": "alphii-49778.firebaseapp.com",
+    "projectId": "alphii-49778",
+    "storageBucket": "alphii-49778.appspot.com",
+    "messagingSenderId": "391066040962",
+    "appId": "1:391066040962:web:a356bbc1829af3980a529b",
+    "measurementId": "G-69BMFZB34D",
+    "serviceAccount": "resources/licenses/serviceAccount.json",
+    "databaseURL": "https://alphii-49778-default-rtdb.firebaseio.com"
+    
+}
+
+firebase = pyrebase.initialize_app(config)
+storage = firebase.storage()
 
 # Health check
 @router.get("/api/phototools/health-check")
@@ -19,19 +36,28 @@ async def health_check():
 async def remove_bg(remove_bg_in_request: RemoveBgInRequest) -> RemoveBgInResponse:
     try:
         image = base64_to_pil(remove_bg_in_request.image_base64)
+        # image = base64_to_image(remove_bg_in_request.image_base64)
+        
     except:
         return RemoveBgInResponse(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
                                     message="Cannot convert base64 to image",
                                     image_base64="")
     
     # Remove background process
-    image = getbg(image)
+    object_of_image, mask = getbg(image)
     
-    img_base64 = pil_to_base64(image)
+    # Save mask to firebase storage
+    cv2.imwrite("resources/image/mask.jpg", mask)
+    storage.child("mask.jpg").put("resources/image/mask.jpg")
+    mask_url = storage.child("mask.jpg").get_url(None)
+
+
+    # img_base64 = pil_to_base64(mask)
+    # img_base64 = image_to_base64(object_of_image)
     
     return RemoveBgInResponse(status_code=status.HTTP_200_OK, 
                                 message="Success",
-                                image_base64=img_base64)
+                                mask_url=mask_url)
     
 
 # # Inpainting

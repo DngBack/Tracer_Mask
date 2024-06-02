@@ -150,4 +150,4 @@ def getbg(image):
     fn = lambda x : 255 if x > thresh else 0
     mask = mask.convert('L').point(fn, mode='1')
     mask = ImageOps.invert(mask)
-    return object_of_image
+    return object_of_image, mask
