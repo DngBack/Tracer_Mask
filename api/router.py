@@ -47,9 +47,9 @@ async def remove_bg(remove_bg_in_request: RemoveBgInRequest) -> RemoveBgInRespon
     object_of_image, mask = getbg(image)
     
     # Save mask to firebase storage
-    cv2.imwrite("resources/image/mask.jpg", mask)
-    storage.child("mask.jpg").put("resources/image/mask.jpg")
-    mask_url = storage.child("mask.jpg").get_url(None)
+    cv2.imwrite("resources/image/mask.png", mask)
+    storage.child("mask.png").put("resources/image/mask.png")
+    mask_url = storage.child("mask.png").get_url(None)
 
 
     # img_base64 = pil_to_base64(mask)
