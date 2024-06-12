@@ -11,7 +11,7 @@ __pycache__/
 *.so
 
 # Secret / sensitive information
-resources/licenses/serviceAccount.json
+resources/licenses/
 
 # Distribution / packaging
 .Python
