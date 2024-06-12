@@ -1,0 +1,20 @@
+version: "1.0"
+
+services:
+  dang-xa:
+    image: quynb5/tracer
+    container_name: tracer
+    command: /bin/bash -c "cd /Tracer_Mask && python main.py"
+    restart: unless-stopped
+    network_mode: host
+    volumes:
+      - ./:/tracer
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    environment:
+      - TZ=Asia/Ho_Chi_Minh
